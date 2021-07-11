@@ -11,7 +11,7 @@ API's:
 
 1. To Create New User - 
 
-Type of the request - POST
+Type of the request - POST\
 Request URL - http://localhost:3000/user/create
 Request Body - {
     "name":"sample name",
