@@ -9,8 +9,7 @@ Node Version 15.14.0 is required
 
 API's:
 
-1. To Create New User - 
-
+1. To Create New User - \
 Type of the request - POST\
 Request URL - http://localhost:3000/user/create \
 Request Body - {\
@@ -20,7 +19,7 @@ Request Body - {\
     "address":"sample"\
 }
 
-2. To Fetch Used details (Need to pass any one of the following parameters - name , phone or email) - 
+2. To Fetch Used details (Need to pass any one of the following parameters - name , phone or email) - \
 Request Type - GET\
 Request URL (for searching by name) - http://localhost:3000/user/get?name=samplename \
 Request URL (for searching by phone) - http://localhost:3000/user/get?name=9999999 \
