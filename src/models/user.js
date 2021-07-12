@@ -2,7 +2,7 @@ var openDb = require('../db/sqlite')
 var db;
 var createTable = async () => {
     db = await openDb()
-    db.exec("CREATE TABLE IF NOT EXISTS Users(userid INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, phone TEXT NOT NULL UNIQUE, address TEXT)")
+    db.exec("CREATE TABLE IF NOT EXISTS Users(userid INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, phone TEXT NOT NULL UNIQUE, address TEXT, deleted BOOLEAN DEFAULT (0) NOT NULL CHECK (deleted IN (0, 1)))")
 }
 
 var insertData = async (name, email, phone, address) => {
@@ -21,8 +21,8 @@ var insertData = async (name, email, phone, address) => {
 var fetchData = async (searchParameter) => {
     try {
         db = await openDb()
-        var selectQuery = "SELECT userid, name, email, phone, address FROM Users WHERE " + searchParameter.type + " = ?"
-        var params = [searchParameter.value]
+        var selectQuery = "SELECT userid, name, email, phone, address FROM Users WHERE " + searchParameter.type + " = ? AND deleted = ?"
+        var params = [searchParameter.value, 0]
         var rows = await db.all(selectQuery, params)
         return rows
     } catch (e) {
@@ -54,8 +54,8 @@ var updateData = async (userid, updateParams) => {
 var deleteData = async (userid) => {
     try {
         db = await openDb()
-        var deleteQuery = "DELETE FROM Users where userid = ?"
-        var params = [userid]
+        var deleteQuery = "UPDATE Users SET deleted = ? where userid = ?"
+        var params = [1, userid]
         var result = await db.run(deleteQuery, params)
         return (result)
     } catch (e) {
@@ -67,7 +67,7 @@ var deleteData = async (userid) => {
 var fetchAllUsers = async () => {
     try {
         db = await openDb()
-        var result = db.all("SELECT userid, name, email, phone, address FROM Users")
+        var result = db.all("SELECT userid, name, email, phone, address FROM Users where deleted = 0")
         return result
     } catch (e) {
         return new Error(e)
